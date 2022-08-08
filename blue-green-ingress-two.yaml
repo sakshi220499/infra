@@ -1,0 +1,22 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: blue-green-ingress-two
+spec:
+  host: app.example.com
+  upstreams:
+  - name: colour-v1
+    service: blue-app-service
+    port: 8080
+  - name: colour-v2
+    service: green-app-service
+    port: 8081
+  routes:
+  - path: /colours
+    splits:
+    - weight: 75
+      action:
+        pass: products-v1
+    - weight: 25
+      action:
+        pass: products-v2
